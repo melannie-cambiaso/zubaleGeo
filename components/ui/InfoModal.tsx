@@ -19,7 +19,7 @@ export const InfoModal = ({ visible, title, message, onPress }: Props) => {
         <View style={styles.content}>
           {title && <Text style={styles.title}>{title}</Text>}
           <Text>{message}</Text>
-          <Button title="OK" onPress={onPress} />
+          {onPress && <Button title="OK" onPress={onPress} />}
         </View>
       </View>
     </Modal>

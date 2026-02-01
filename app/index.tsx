@@ -46,15 +46,29 @@ export default function App() {
   }, [marker, currentPosition]);
 
   if (loading) return <Loading message="Getting location..." />;
-  if (errorMsg)
-    return (
-      <InfoModal
-        title="Error"
-        visible={true}
-        message={errorMsg}
-        onPress={openAppSettings}
-      />
-    );
+  if (errorMsg) {
+    if (errorMsg === "Permission to access location was denied") {
+      return (
+        <InfoModal
+          title="Error"
+          visible={true}
+          message={errorMsg}
+          onPress={openAppSettings}
+        />
+      );
+    } else if (
+      errorMsg === "Location services are not available on emulators." ||
+      errorMsg === "Mocked locations are not allowed."
+    ) {
+      return (
+        <InfoModal
+          title="Error"
+          visible={true}
+          message={errorMsg}
+        />
+      );
+    }
+  }
 
   const initialCamera: CameraPosition = {
     coordinates: {
@@ -77,7 +91,7 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { marginBottom: insets.bottom }]}>
       <MapComponent.View
         style={styles.container}
         cameraPosition={initialCamera}

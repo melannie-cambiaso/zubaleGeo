@@ -1,5 +1,6 @@
 import { InfoModal } from "@/components/ui/InfoModal";
 import { Loading } from "@/components/ui/Loading";
+import { useLocationContext } from "@/context/LocationProvider";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { AppleMaps, CameraPosition, Coordinates, GoogleMaps } from "expo-maps";
 import { useRouter } from "expo-router";
@@ -16,6 +17,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function App() {
   const { location, errorMsg, loading, openAppSettings } = useGeolocation();
+  const { setLocation } = useLocationContext();
   const [marker, setMarker] = useState<Coordinates | null>(null);
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -65,6 +67,12 @@ export default function App() {
   const MapComponent = Platform.OS === "ios" ? AppleMaps : GoogleMaps;
 
   const handlePress = () => {
+    if (currentPosition.latitude && currentPosition.longitude) {
+      setLocation({
+        latitude: currentPosition.latitude,
+        longitude: currentPosition.longitude,
+      });
+    }
     router.push("/camera");
   };
 

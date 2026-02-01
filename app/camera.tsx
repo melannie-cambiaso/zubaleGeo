@@ -1,6 +1,7 @@
 import { Loading } from "@/components/ui/Loading";
 import { PhotoPreview } from "@/components/ui/PhotoPreview";
 import { useLocationContext } from "@/context/LocationProvider";
+import { useOrientation } from "@/hooks/useOrientation";
 import {
   CameraCapturedPicture,
   CameraView,
@@ -20,12 +21,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function CameraLayout() {
   const [photo, setPhoto] = useState<CameraCapturedPicture | null>(null);
-  const [permission, requestPermission] = useCameraPermissions();
-  const { bottom, top } = useSafeAreaInsets();
-  const { width, height } = useWindowDimensions();
   const cameraRef = useRef<CameraView>(null);
-  const { location } = useLocationContext();
-  console.log(bottom, top)
+  const [permission, requestPermission] = useCameraPermissions();
+  const { bottom } = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
+  const { location, markerLocation } = useLocationContext();
+  const { angle } = useOrientation();
 
   if (!permission) {
     return <Loading message="Requesting camera permission..." />;
@@ -94,6 +95,16 @@ export default function CameraLayout() {
         }}
         onPress={handlePress}
       />
+      <View
+        style={[
+          styles.arrow,
+          {
+            transform: [{ rotate: `${angle}deg` }],
+            bottom: bottom + 20,
+            left: 20,
+          },
+        ]}
+      />
     </View>
   );
 }
@@ -126,5 +137,16 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     color: "white",
+  },
+  arrow: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 20,
+    borderRightWidth: 20,
+    borderBottomWidth: 60,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderBottomColor: "red",
+    position: "absolute",
   },
 });

@@ -8,6 +8,8 @@ export interface Location {
 export interface LocationContext {
   location: Location;
   setLocation: Dispatch<SetStateAction<Location>>;
+  markerLocation: Location;
+  setMarkerLocation?: Dispatch<SetStateAction<Location>>;
 }
 
 const LocationContextDefaultValue: LocationContext = {
@@ -16,7 +18,13 @@ const LocationContextDefaultValue: LocationContext = {
     longitude: 0,
   },
   setLocation: () => {},
+  markerLocation: {
+    latitude: 0,
+    longitude: 0,
+  },
+  setMarkerLocation: () => {},
 };
+
 
 export const LocationContext = createContext<LocationContext>(
   LocationContextDefaultValue,

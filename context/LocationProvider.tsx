@@ -10,9 +10,15 @@ export const LocationProvider = ({
     latitude: 0,
     longitude: 0,
   });
+  const [markerLocation, setMarkerLocation] = useState<Location>({
+    latitude: 0,
+    longitude: 0,
+  });
 
   return (
-    <LocationContext.Provider value={{ location, setLocation }}>
+    <LocationContext.Provider
+      value={{ location, setLocation, markerLocation, setMarkerLocation }}
+    >
       {children}
     </LocationContext.Provider>
   );

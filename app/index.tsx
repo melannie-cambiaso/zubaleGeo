@@ -60,13 +60,7 @@ export default function App() {
       errorMsg === "Location services are not available on emulators." ||
       errorMsg === "Mocked locations are not allowed."
     ) {
-      return (
-        <InfoModal
-          title="Error"
-          visible={true}
-          message={errorMsg}
-        />
-      );
+      return <InfoModal title="Error" visible={true} message={errorMsg} />;
     }
   }
 
@@ -87,6 +81,13 @@ export default function App() {
         longitude: currentPosition.longitude,
       });
     }
+    if (marker?.latitude && marker?.longitude) {
+      setLocation({
+        latitude: marker.latitude,
+        longitude: marker.longitude,
+      });
+    }
+
     router.push("/camera");
   };
 

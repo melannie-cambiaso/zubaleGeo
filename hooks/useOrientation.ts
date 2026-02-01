@@ -1,21 +1,29 @@
 import { useLocationContext } from "@/context/LocationProvider";
-import { DeviceMotion } from "expo-sensors";
+import { Magnetometer } from "expo-sensors";
 import { useEffect, useMemo, useState } from "react";
 
 export const useOrientation = () => {
-  const [orientation, setOrientation] = useState(0);
+  const [heading, setHeading] = useState(0);
   const { location, markerLocation } = useLocationContext();
 
   useEffect(() => {
     // Set update interval (in ms)
-    DeviceMotion.setUpdateInterval(100);
+    Magnetometer.setUpdateInterval(100);
 
-    const subscription = DeviceMotion.addListener((data) => {
-      if (data.rotation) {
-        // Alpha is the rotation around Z-axis (compass heading)
-        const alpha = data.rotation.alpha; // in radians
-        setOrientation(alpha);
-      }
+    const subscription = Magnetometer.addListener((data) => {
+      // Calculate heading from magnetometer data
+      // atan2 gives us the angle in radians
+      let angle = Math.atan2(data.y, data.x);
+
+      // Convert to degrees and normalize to 0-360
+      let degrees = angle * (180 / Math.PI);
+
+      // Adjust for device orientation (portrait mode)
+      degrees = (degrees + 360) % 360;
+
+      // Convert back to radians for consistency
+      const radians = (degrees * Math.PI) / 180;
+      setHeading(radians);
     });
 
     return () => subscription.remove();
@@ -40,14 +48,15 @@ export const useOrientation = () => {
   }, [location, markerLocation]);
 
   const angle = useMemo(() => {
-    let angle = bearing - orientation;
+    // Calculate the direction to point: bearing minus current heading
+    let angle = bearing - heading;
 
     // Normalize angle between -π and π
     while (angle > Math.PI) angle -= 2 * Math.PI;
     while (angle < -Math.PI) angle += 2 * Math.PI;
 
-    return angle * (180 / Math.PI); // convert to degrees
-  }, [bearing, orientation]);
+    return angle; // in radians
+  }, [bearing, heading]);
 
   return {
     angle,

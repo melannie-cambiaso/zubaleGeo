@@ -25,8 +25,9 @@ export default function CameraLayout() {
   const [permission, requestPermission] = useCameraPermissions();
   const { bottom } = useSafeAreaInsets();
   const { width } = useWindowDimensions();
-  const { location, markerLocation } = useLocationContext();
+  const { location } = useLocationContext();
   const { angle } = useOrientation();
+  console.log("angle", angle);
 
   if (!permission) {
     return <Loading message="Requesting camera permission..." />;
@@ -99,7 +100,7 @@ export default function CameraLayout() {
         style={[
           styles.arrow,
           {
-            transform: [{ rotate: `${angle}deg` }],
+            transform: [{ rotate: `${angle}rad` }],
             bottom: bottom + 20,
             left: 20,
           },

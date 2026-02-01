@@ -17,7 +17,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function App() {
   const { location, errorMsg, loading, openAppSettings } = useGeolocation();
-  const { setLocation } = useLocationContext();
+  const { setLocation, setMarkerLocation } = useLocationContext();
   const [marker, setMarker] = useState<Coordinates | null>(null);
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -82,7 +82,7 @@ export default function App() {
       });
     }
     if (marker?.latitude && marker?.longitude) {
-      setLocation({
+      setMarkerLocation({
         latitude: marker.latitude,
         longitude: marker.longitude,
       });

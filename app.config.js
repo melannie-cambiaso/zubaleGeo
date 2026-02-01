@@ -10,7 +10,7 @@ export default {
     newArchEnabled: true,
     ios: {
       supportsTablet: true,
-      package: "cl.melanniecambiaso.zubalegeo"
+      bundleIdentifier: "cl.melanniecambiaso.zubalegeo"
     },
     android: {
       adaptiveIcon: {

@@ -97,14 +97,9 @@ export default function App() {
         style={styles.container}
         cameraPosition={initialCamera}
         onMapClick={(event) => setMarker(event.coordinates)}
-        circles={[
-          {
-            center: currentPosition,
-            radius: 5,
-            strokeColor: "blue",
-            fillColor: "rgba(0, 0, 255, 0.3)",
-          },
-        ]}
+        properties={{
+          isMyLocationEnabled: true,
+        }}
         markers={marker ? [{ coordinates: marker }] : []}
       />
       <TouchableOpacity
